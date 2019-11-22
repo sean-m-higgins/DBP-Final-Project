@@ -7,7 +7,7 @@ from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, Post
 from flaskDemo.models import User, Post,Department, Dependent, Dept_Locations, Employee, Project, Works_On
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
-# test
+
 
 @app.route("/")
 @app.route("/home")
