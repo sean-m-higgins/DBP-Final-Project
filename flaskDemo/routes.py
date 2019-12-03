@@ -4,7 +4,7 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskDemo import app, db, bcrypt
 from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, DeptForm, DeptUpdateForm, AssignUpdateEssnForm, AssignUpdatePnoForm, AssignForm, AssignFormPno
-from flaskDemo.models import User, Post,Department, Dependent, Dept_Locations, Employee, Project, Works_On
+from flaskDemo.models import User, Post, Experiment, Employee, Project
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -12,7 +12,9 @@ from datetime import datetime
 @app.route("/")
 @app.route("/home")
 def home():
-    results = Department.query.all()
+    results = Experiment.query.all()
+    return render_template('experiment_home.html', outString = results)
+
     results3 = Employee.query.join(Works_On,Employee.ssn == Works_On.essn) \
                .add_columns(Employee.fname, Employee.lname, Works_On.essn, Works_On.pno, Works_On.hours) \
                .join(Project, Works_On.pno == Project.pnumber).add_columns(Project.pname, Project.pnumber)
@@ -121,20 +123,20 @@ def new_dept():
                            form=form, legend='New Department')
 
 
-@app.route("/dept/<dnumber>")
+@app.route("/expriment/<expriment_ID>")
 @login_required
-def dept(dnumber):
-    dept = Department.query.get_or_404(dnumber)
-    return render_template('dept.html', title=dept.dname, dept=dept, now=datetime.utcnow())
+def experiment(Expriment_ID):
+    experiment = Experiment.query.get_or_404(Expriment_ID)
+    return render_template('experiment.html', title=experiment.expriment_ID, experiment=experiment, now=datetime.utcnow())
 
 
-@app.route("/dept/<dnumber>/update", methods=['GET', 'POST'])
+@app.route("/experiment/<expriment_ID>/update", methods=['GET', 'POST'])
 @login_required
-def update_dept(dnumber):
-    dept = Department.query.get_or_404(dnumber)
-    currentDept = dept.dname
+def update_experiment(Expriment_ID):
+    experiment = Experiment.query.get_or_404(expriment_ID)
+    currentExpriment = experiment.results  # Deng gets here December 3, 5:30pm
 
-    form = DeptUpdateForm()
+    form = ExperimentUpdateForm()
     if form.validate_on_submit():          # notice we are are not passing the dnumber from the form
         if currentDept !=form.dname.data:
             dept.dname=form.dname.data
@@ -153,13 +155,13 @@ def update_dept(dnumber):
                            form=form, legend='Update Department')
 
 
-@app.route("/dept/<dnumber>/delete", methods=['POST'])
+@app.route("/experiment/<expriment_ID>/delete", methods=['POST'])
 @login_required
-def delete_dept(dnumber):
-    dept = Department.query.get_or_404(dnumber)
-    db.session.delete(dept)
+def delete_experiment(expriment_ID):
+    experiment = Experiment.query.get_or_404(expriment_ID)
+    db.session.delete(experiment)
     db.session.commit()
-    flash('The department has been deleted!', 'success')
+    flash('The experiment has been deleted!', 'success')
     return redirect(url_for('home'))
 
 
