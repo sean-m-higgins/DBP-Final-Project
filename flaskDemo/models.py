@@ -40,32 +40,42 @@ class Post(db.Model):
 
 
 
-class Dependent(db.Model):
-    __table__ = db.Model.metadata.tables['dependent']
+class Experiment(db.Model):
+    __table__ = db.Model.metadata.tables['Experiment']
     
-class Department(db.Model):
-    __table__ = db.Model.metadata.tables['department']
+class Project(db.Model):
+    __table__ = db.Model.metadata.tables['Project']
 
 # used for query_factory
-def getDepartment(columns=None):
-    u = Department.query
-    if columns:
-        u = u.options(orm.load_only(*columns))
-    return u
+#def getDepartment(columns=None):
+#    u = Department.query
+#    if columns:
+#        u = u.options(orm.load_only(*columns))
+#    return u
 
-def getDepartmentFactory(columns=None):
-    return partial(getDepartment, columns=columns)
+#def getDepartmentFactory(columns=None):
+#    return partial(getDepartment, columns=columns)
 
-class Dept_Locations(db.Model):
-    __table__ = db.Model.metadata.tables['dept_locations']
+class Uses_Reagent(db.Model):
+    __table__ = db.Model.metadata.tables['Use_Reagent']
     
 class Employee(db.Model):
-    __table__ = db.Model.metadata.tables['employee']
-class Project(db.Model):
-    __table__ = db.Model.metadata.tables['project']
-class Works_On(db.Model):
-    __table__ = db.Model.metadata.tables['works_on']
+    __table__ = db.Model.metadata.tables['Employee']
 
+class Project(db.Model):
+    __table__ = db.Model.metadata.tables['Project']
+
+class Reagent(db.Model):
+    __table__ = db.Model.metadata.tables['Reagent']
+
+class Product(db.Model):
+    __table__ = db.Model.metadata.tables['Product']
+
+class Equipment(db.Model):
+    __table__ = db.Model.metadata.tables['Equipment']
+
+class Uses_Equipment(db.Model):
+    __table__ = db.Model.metadata.tables['Uses_Equipment']
     
 
   
