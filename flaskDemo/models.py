@@ -57,7 +57,7 @@ class Project(db.Model):
 #    return partial(getDepartment, columns=columns)
 
 class Uses_Reagent(db.Model):
-    __table__ = db.Model.metadata.tables['Use_Reagent']
+    __table__ = db.Model.metadata.tables['Uses_Reagent']
     
 class Employee(db.Model):
     __table__ = db.Model.metadata.tables['Employee']
