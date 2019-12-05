@@ -4,10 +4,10 @@
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ row }}</a>		  
-              <small class="text-muted">{{ row['Experiment_ID'] }}  {{ row['Experiment_Objective'] }} {{row['Date']}}</small>		  
+              <a class="mr-2" href="#">{{ row['experiment_ID'] }}</a>		  
+              <small class="text-muted">{{ row['experiment_ID'] }}  {{ row['experiment_Objective'] }} {{row['date']}}</small>		  
             </div>
-			<h2><a class="article-title" href="{{ url_for('Experiment', Experiment_ID=row.Experiment_ID) }}">{{ row.Experiment_Objective }} {{row['Date']}}</a></h2>
+			<h2><a class="article-title" href="{{ url_for('experiment', experiment_ID=row.experiment_ID)}}">{{ row.experiment_Objective }}</a></h2>
            
           </div>
         </article>

@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ legend }}</legend>
+			{% if legend != "Update Experiment" %}
+            <div class="form-group">
+                {{ form.expriment_ID.label(class="form-control-label") }}
+                {% if form.expriment_ID.errors %}
+                    {{ form.expriment_ID(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.expriment_ID.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.expriment_ID(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+			{% endif %}
+			
+            <div class="form-group">
+                {{ form.project_ID.label(class="form-control-label") }}
+                {% if form.project_ID.errors %}
+                    {{ form.project_ID(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.project_ID.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.project_ID(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+			<div class="form-group">
+                {{ form.employee_ID.label(class="form-control-label") }}
+                {% if form.employee_ID.errors %}
+                    {{ form.employee_ID(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.employee_ID.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.employee_ID(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+			<div class="form-group">
+                {{ form.experiment_Objective.label(class="form-control-label") }}
+                {% if form.experiment_Objective.errors %}
+                    {{ form.experiment_Objective(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.experiment_Objective.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.experiment_Objective(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.date.label(class="form-control-label") }}
+                {% if form.date.errors %}
+                    {{ form.date(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.date.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.date(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.results.label(class="form-control-label") }}
+                {% if form.results.errors %}
+                    {{ form.results(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.results.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.results(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}

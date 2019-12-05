@@ -3,8 +3,8 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskDemo import app, db, bcrypt
-from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, DeptForm, DeptUpdateForm, AssignUpdateEssnForm, AssignUpdatePnoForm, AssignForm, AssignFormPno
-from flaskDemo.models import User, Post, Department, Dependent, Dept_Locations, Employee, Project, Works_On, Experiment
+from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ExptForm
+from flaskDemo.models import User, Post, Employee, Project, Experiment
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -109,62 +109,63 @@ def account():
                            image_file=image_file, form=form)
 
 
-@app.route("/dept/new", methods=['GET', 'POST'])
+@app.route("/expt/new", methods=['GET', 'POST'])
 @login_required
-def new_dept():
-    form = DeptForm()
+def new_expt():
+    form = ExptForm()
     if form.validate_on_submit():
-        dept = Department(dname=form.dname.data, dnumber=form.dnumber.data,mgr_ssn=form.mgr_ssn.data,mgr_start=form.mgr_start.data)
+        expt = Experiment(experiment_ID = form.experiment_ID.data, project_ID =form.project_ID.data,employee_ID =form.employee_ID.data,
+                          experiment_Objective=form.experiment_Objective.data, date = form.date.data, results = form.results.data)
         db.session.add(dept)
         db.session.commit()
-        flash('You have added a new department!', 'success')
+        flash('You have added a new experiment!', 'success')
         return redirect(url_for('home'))
-    return render_template('create_dept.html', title='New Department',
-                           form=form, legend='New Department')
+    return render_template('create_expt.html', title='New Experiment',
+                           form=form, legend='New Experiment')
 
 
-@app.route("/expriment/<expriment_ID>")
+@app.route("/expt/<expriment_ID>")
 @login_required
-def experiment(Expriment_ID):
-    experiment = Experiment.query.get_or_404(Expriment_ID)
-    return render_template('experiment.html', title=experiment.expriment_ID, experiment=experiment, now=datetime.utcnow())
+def experiment(expriment_ID):
+    expt = Experiment.query.get_or_404(expriment_ID)
+    return render_template('experiment.html', title=expt.expriment_ID, experiment=expt, now=datetime.utcnow())
 
 
-@app.route("/experiment/<expriment_ID>/update", methods=['GET', 'POST'])
+@app.route("/expt/<expriment_ID>/update", methods=['GET', 'POST'])
 @login_required
-def update_experiment(Expriment_ID):
-    experiment = Experiment.query.get_or_404(expriment_ID)
-    currentExpriment = experiment.results  # Deng gets here December 3, 5:30pm
+def update_experiment(expriment_ID):
+    expt = Experiment.query.get_or_404(expriment_ID)
+    currentExptObjective = expt.Objective
+    currentExptResult = expt.results  
 
     form = ExperimentUpdateForm()
     if form.validate_on_submit():          # notice we are are not passing the dnumber from the form
-        if currentDept !=form.dname.data:
-            dept.dname=form.dname.data
-        dept.mgr_ssn=form.mgr_ssn.data
-        dept.mgr_start=form.mgr_start.data
+        if currentExptObjective !=form.experiment_Objective.data:
+            expt.experiment_Objective=form.experiment_Objective.data
+        if currentExptResult != form.results.data:
+            expt.results = form.results.data
         db.session.commit()
-        flash('Your department has been updated!', 'success')
-        return redirect(url_for('dept', dnumber=dnumber))
+        flash('Your experiment has been updated!', 'success')
+        return redirect(url_for('experiment', expriment_ID=expriment_ID))
     elif request.method == 'GET':              # notice we are not passing the dnumber to the form
 
-        form.dnumber.data = dept.dnumber
-        form.dname.data = dept.dname
-        form.mgr_ssn.data = dept.mgr_ssn
-        form.mgr_start.data = dept.mgr_start
-    return render_template('create_dept.html', title='Update Department',
-                           form=form, legend='Update Department')
+        form.experiment_Objective.data = expt.experiment_Objective
+        form.results.data = expt.results
+        
+    return render_template('create_expt.html', title='Update Experiment',
+                           form=form, legend='Update Experiment')
 
 
-@app.route("/experiment/<expriment_ID>/delete", methods=['POST'])
+@app.route("/expt/<expriment_ID>/delete", methods=['POST'])
 @login_required
 def delete_experiment(expriment_ID):
-    experiment = Experiment.query.get_or_404(expriment_ID)
-    db.session.delete(experiment)
+    expt = Experiment.query.get_or_404(expriment_ID)
+    db.session.delete(expt)
     db.session.commit()
     flash('The experiment has been deleted!', 'success')
     return redirect(url_for('home'))
 
-
+# Deng gets here Dec 4, 11:30 pm
 
 @app.route("/assign/<essn>/<pno>")
 @login_required
