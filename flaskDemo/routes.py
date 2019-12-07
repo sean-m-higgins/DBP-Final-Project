@@ -124,17 +124,17 @@ def new_expt():
                            form=form, legend='New Experiment')
 
 
-@app.route("/expt/<expriment_ID>")
+@app.route("/expt/<experiment_ID>")
 @login_required
-def experiment(expriment_ID):
-    expt = Experiment.query.get_or_404(expriment_ID)
-    return render_template('experiment.html', title=expt.expriment_ID, experiment=expt, now=datetime.utcnow())
+def expt(experiment_ID):
+    expt = Experiment.query.get_or_404(experiment_ID)
+    return render_template('experiment.html', title=expt.experiment_ID, expt=expt, now=datetime.utcnow())
 
 
-@app.route("/expt/<expriment_ID>/update", methods=['GET', 'POST'])
+@app.route("/expt/<experiment_ID>/update", methods=['GET', 'POST'])
 @login_required
-def update_experiment(expriment_ID):
-    expt = Experiment.query.get_or_404(expriment_ID)
+def update_experiment(experiment_ID):
+    expt = Experiment.query.get_or_404(experiment_ID)
     currentExptObjective = expt.Objective
     currentExptResult = expt.results  
 
@@ -146,7 +146,7 @@ def update_experiment(expriment_ID):
             expt.results = form.results.data
         db.session.commit()
         flash('Your experiment has been updated!', 'success')
-        return redirect(url_for('experiment', expriment_ID=expriment_ID))
+        return redirect(url_for('experiment', experiment_ID=experiment_ID))
     elif request.method == 'GET':              # notice we are not passing the dnumber to the form
 
         form.experiment_Objective.data = expt.experiment_Objective
@@ -156,10 +156,10 @@ def update_experiment(expriment_ID):
                            form=form, legend='Update Experiment')
 
 
-@app.route("/expt/<expriment_ID>/delete", methods=['POST'])
+@app.route("/expt/<experiment_ID>/delete", methods=['POST'])
 @login_required
-def delete_experiment(expriment_ID):
-    expt = Experiment.query.get_or_404(expriment_ID)
+def delete_experiment(experiment_ID):
+    expt = Experiment.query.get_or_404(experiment_ID)
     db.session.delete(expt)
     db.session.commit()
     flash('The experiment has been deleted!', 'success')
