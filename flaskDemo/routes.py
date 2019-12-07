@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskDemo import app, db, bcrypt
-from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ExptForm
+from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ExptForm, UpdateExptForm
 from flaskDemo.models import User, Post, Employee, Project, Experiment
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
@@ -116,7 +116,7 @@ def new_expt():
     if form.validate_on_submit():
         expt = Experiment(experiment_ID = form.experiment_ID.data, project_ID =form.project_ID.data,employee_ID =form.employee_ID.data,
                           experiment_Objective=form.experiment_Objective.data, date = form.date.data, results = form.results.data)
-        db.session.add(dept)
+        db.session.add(expt)
         db.session.commit()
         flash('You have added a new experiment!', 'success')
         return redirect(url_for('home'))
@@ -135,10 +135,10 @@ def expt(experiment_ID):
 @login_required
 def update_experiment(experiment_ID):
     expt = Experiment.query.get_or_404(experiment_ID)
-    currentExptObjective = expt.Objective
+    currentExptObjective = expt.experiment_Objective
     currentExptResult = expt.results  
 
-    form = ExperimentUpdateForm()
+    form = UpdateExptForm()
     if form.validate_on_submit():          # notice we are are not passing the dnumber from the form
         if currentExptObjective !=form.experiment_Objective.data:
             expt.experiment_Objective=form.experiment_Objective.data
@@ -146,7 +146,7 @@ def update_experiment(experiment_ID):
             expt.results = form.results.data
         db.session.commit()
         flash('Your experiment has been updated!', 'success')
-        return redirect(url_for('experiment', experiment_ID=experiment_ID))
+        return redirect(url_for('home'))
     elif request.method == 'GET':              # notice we are not passing the dnumber to the form
 
         form.experiment_Objective.data = expt.experiment_Objective

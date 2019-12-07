@@ -130,12 +130,20 @@ class PostForm(FlaskForm):
 class ExptForm (FlaskForm):
     experiment_ID =StringField("Experiment ID", validators = [DataRequired(),Length (max=4)])
     project_ID = SelectField("Project ID", choices=projChoices, validators=[DataRequired()])
-    employee_ID = SelectField("Employee ID", choices=emplChoices, validators=[DataRequired()])
+    employee_ID = SelectField("Employee ID", choices=emplChoices, coerce=int, validators=[DataRequired()])
     experiment_Objective = StringField("Objective", validators = [DataRequired(),Length (max=100)])
-    data = DateField("Experiment date:", format='%Y-%m-%d')
+    date = DateField("Experiment date:", format='%Y-%m-%d')
     results = StringField("Results")
-    submit = SubmitField('Update this department')
+    submit = SubmitField('Create this experiment')
 
+class UpdateExptForm (ExptForm):
+    experiment_ID =HiddenField("")
+    project_ID = HiddenField("")
+    employee_ID = HiddenField("")
+    experiment_Objective = StringField("Objective", validators = [DataRequired(),Length (max=100)])
+    date = DateField("Experiment date:", format='%Y-%m-%d')
+    results = StringField("Results")
+    submit = SubmitField('Update this experiment')
 
 #class DeptForm(DeptUpdateForm):
 

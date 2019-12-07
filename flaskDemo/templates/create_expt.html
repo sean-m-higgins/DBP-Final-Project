@@ -7,16 +7,16 @@
             <legend class="border-bottom mb-4">{{ legend }}</legend>
 			{% if legend != "Update Experiment" %}
             <div class="form-group">
-                {{ form.expriment_ID.label(class="form-control-label") }}
-                {% if form.expriment_ID.errors %}
-                    {{ form.expriment_ID(class="form-control form-control-lg is-invalid") }}
+                {{ form.experiment_ID.label(class="form-control-label") }}
+                {% if form.experiment_ID.errors %}
+                    {{ form.experiment_ID(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.expriment_ID.errors %}
+                        {% for error in form.experiment_ID.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.expriment_ID(class="form-control form-control-lg") }}
+                    {{ form.experiment_ID(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
 			{% endif %}
