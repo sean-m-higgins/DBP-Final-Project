@@ -5,7 +5,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, AnyOf
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flaskDemo import db
-from flaskDemo.models import User, Project, Employee
+from flaskDemo.models import User, Project, Employee, Product
 from wtforms.fields.html5 import DateField
 
 #ssns = Department.query.with_entities(Department.mgr_ssn).distinct()
@@ -133,7 +133,7 @@ class ExptForm (FlaskForm):
     employee_ID = SelectField("Employee ID", choices=emplChoices, coerce=int, validators=[DataRequired()])
     experiment_Objective = StringField("Objective", validators = [DataRequired(),Length (max=100)])
     date = DateField("Experiment date:", format='%Y-%m-%d')
-    results = StringField("Results")
+    results = TextAreaField("Results")
     submit = SubmitField('Create this experiment')
 
 class UpdateExptForm (ExptForm):
@@ -145,6 +145,11 @@ class UpdateExptForm (ExptForm):
     results = StringField("Results")
     submit = SubmitField('Update this experiment')
 
+class AddProductForm(FlaskForm):
+    product_Name= StringField("product Name", validators = [DataRequired(),Length (max=50)])
+    description= TextAreaField("Product Description", validators=[DataRequired()])
+    location= TextAreaField("Product location", validators=[DataRequired()])
+    submit = SubmitField('Add this product')
 #class DeptForm(DeptUpdateForm):
 
 #    dnumber=IntegerField('Department Number', validators=[DataRequired()])

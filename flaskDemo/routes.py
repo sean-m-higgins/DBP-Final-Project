@@ -3,8 +3,8 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskDemo import app, db, bcrypt
-from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ExptForm, UpdateExptForm
-from flaskDemo.models import User, Post, Employee, Project, Experiment
+from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ExptForm, UpdateExptForm,AddProductForm
+from flaskDemo.models import User, Post, Employee, Project, Experiment, Reagent,Equipment,Product
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -166,6 +166,42 @@ def delete_experiment(experiment_ID):
     return redirect(url_for('home'))
 
 # Deng gets here Dec 4, 11:30 pm
+
+
+@app.route("/reagentList")
+def reagentList():
+    results = Reagent.query.all()
+    return render_template('reagentList.html', outString = results)
+
+@app.route("/equipmentList")
+def equipmentList():
+    results = Equipment.query.all()
+    return render_template('equipmentList.html', outString = results)
+
+@app.route("/addProduct/<experiment_ID>", methods=['GET', 'POST'])
+@login_required
+def addProduct(experiment_ID):
+    form = AddProductForm()
+    if form.validate_on_submit():
+        prdt = Product(experiment_ID = experiment_ID, product_Name =form.product_Name.data,description =form.description.data,
+                          location=form.location.data)
+        db.session.add(prdt)
+        db.session.commit()
+        flash('You have added a new product!', 'success')
+        return redirect(url_for('expt', experiment_ID=experiment_ID))
+    return render_template('add_prdt.html', title='New Product',
+                           form=form, legend='New Product')
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route("/assign/<essn>/<pno>")
 @login_required

@@ -4,12 +4,13 @@
 <!--    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/default.jpg')}}"> -->
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="#">{{ expt.experiment_ID }}</a>
-        <small class="text-muted">{{now.strftime('%A %B, %d %Y %H:%M:%S')}}</small>
+        <a class="mr-2" href="#">{{expt.experiment_Objective}}</a>
+        <small class="text-muted">{{expt.date}}</small>
 
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_experiment', experiment_ID=expt.experiment_ID) }}">Update</a>
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('addProduct', experiment_ID=expt.experiment_ID) }}">Add a product</a>
           </div>
  
       </div>
