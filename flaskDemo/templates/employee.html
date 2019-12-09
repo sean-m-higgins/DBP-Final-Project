@@ -1,0 +1,15 @@
+{% extends "layout_laboratory.html" %}
+{% block content %}
+    {% for row in outString %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{"Employee_ID: "}}{{ row['employee_ID'] }}</a>		  
+              		  
+            </div>
+			 <h2><a class="article-title" href="#">{{ row.Name }}</a></h2>
+           
+          </div>
+        </article>
+     {% endfor %}
+{% endblock content %}

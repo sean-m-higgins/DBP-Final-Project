@@ -284,3 +284,10 @@ def update_assign_pno(essn, pno):
     return render_template('create_assign.html', title='Update Assignment',
                            form=form, legend='Update Assignment')
 
+@app.route("/experimentlist")
+def ExperimentList():
+    results = Experiment.query.join(Employee,Employee.employee_ID == Experiment.employee_ID) \
+    .add_columns(Employee.name,Employee.employee_ID,Experiment.experiment_ID)
+    return render_template('experiment_list.html', outString = results)
+
+    

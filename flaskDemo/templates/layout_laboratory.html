@@ -32,6 +32,16 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Menu
+                  </a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ url_for('ExperimentList') }}">Experiment</a>
+                    <a class="dropdown-item" href="{{ url_for('equipmentList') }}">Equipments</a>
+                    <a class="dropdown-item" href="{{ url_for('reagentList') }}">Reagent</a>
+                  </div>
+                </li>
                 <a class="nav-item nav-link" href="{{ url_for('new_expt') }}">New Experiment</a>
                 
                 <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
@@ -46,6 +56,13 @@
       </nav>
     </header>
     <main role="main" class="container">
+        <body>
+            <h2 id="time" class="text-muted text-center font-weight-bold"></h2>
+            <script>
+            var d = new Date();
+            document.getElementById("time").innerHTML = d;
+            </script> 
+        </body>
       <div class="row">
         <div class="col-md-8">
           {% with messages = get_flashed_messages(with_categories=true) %}
@@ -66,6 +83,7 @@
               <ul class="list-group">
                 <a class="list-group-item list-group-item-light" href="{{ url_for('reagentList') }}">Reagent Inventory</a>
                 <a class="list-group-item list-group-item-light" href="{{ url_for('equipmentList') }}">Equipments</a>
+                <a class="list-group-item list-group-item-light" href="{{ url_for('ExperimentList') }}">Experiment</a>
                 <li class="list-group-item list-group-item-light">Calendars</li>
                 <li class="list-group-item list-group-item-light">etc</li>
               </ul>
@@ -74,12 +92,16 @@
         </div>
       </div>
     </main>
-
+    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script> 
+    var d = new date() 
+    document.getElementById("demo").innerHTML = d;
+    </script>
 </body>
 </html>

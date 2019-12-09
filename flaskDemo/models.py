@@ -76,6 +76,7 @@ class Equipment(db.Model):
 
 class Uses_Equipment(db.Model):
     __table__ = db.Model.metadata.tables['Uses_Equipment']
+
     
 
   
