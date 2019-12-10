@@ -4,7 +4,7 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskDemo import app, db, bcrypt
 from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ExptForm, UpdateExptForm,AddProductForm
-from flaskDemo.models import User, Post, Employee, Project, Experiment, Reagent,Equipment,Product
+from flaskDemo.models import User, Post, Employee, Project, Experiment, Reagent,Equipment,Product, Uses_Equipment, Uses_Reagent
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -109,6 +109,16 @@ def account():
                            image_file=image_file, form=form)
 
 
+@app.route("/expt/<experiment_ID>")
+@login_required
+def expt(experiment_ID):
+    expt = Experiment.query.get_or_404(experiment_ID)
+    product = Product.query.join(Experiment, Experiment.experiment_ID == Product.experiment_ID).filter(Product.experiment_ID == experiment_ID)
+    reagent = Uses_Reagent.query.join(Experiment, Experiment.experiment_ID == Uses_Reagent.experiment_ID).filter(Uses_Reagent.experiment_ID == experiment_ID)
+    equipment = Uses_Equipment.query.join(Experiment, Experiment.experiment_ID == Uses_Equipment.experiment_ID).filter(Uses_Equipment.experiment_ID == experiment_ID)
+    return render_template('experiment.html', title=expt.experiment_ID, expt=expt, now=datetime.utcnow(), product=product, reagent=reagent, equipment=equipment)
+
+
 @app.route("/expt/new", methods=['GET', 'POST'])
 @login_required
 def new_expt():
@@ -122,13 +132,6 @@ def new_expt():
         return redirect(url_for('home'))
     return render_template('create_expt.html', title='New Experiment',
                            form=form, legend='New Experiment')
-
-
-@app.route("/expt/<experiment_ID>")
-@login_required
-def expt(experiment_ID):
-    expt = Experiment.query.get_or_404(experiment_ID)
-    return render_template('experiment.html', title=expt.experiment_ID, expt=expt, now=datetime.utcnow())
 
 
 @app.route("/expt/<experiment_ID>/update", methods=['GET', 'POST'])

@@ -4,7 +4,7 @@
 <!--    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/default.jpg')}}"> -->
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="#">{{expt.experiment_Objective}}</a>
+        <a class="mr-2">{{expt.experiment_Objective}}</a>
         <small class="text-muted">{{expt.date}}</small>
 
           <div>
@@ -12,7 +12,36 @@
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('addProduct', experiment_ID=expt.experiment_ID) }}">Add a product</a>
           </div>
- 
+        <div>
+          <a class="mr-2">Experiment results: {{expt.results}}</a>
+        </div>
+
+        <br>
+        
+        <div>
+          <a class="mr-2">Experiment product(s):</a>
+        </div>
+        
+        <ul>
+        {% for row in product %}
+          <li class="mr-2" href="#">Product Name: {{row['product_Name']}}</li>
+        {% endfor %}
+        </ul>
+
+        <a class="mr-2">Experiment equipment:</a>
+        <ul>
+        {% for row in equipment %}
+          <li class="mr-2" href="#">Equipment ID: {{row['equipment_ID']}}</li>
+        {% endfor %}
+        </ul>
+
+        <a class="mr-2">Experiment reagent(s):</a>
+        <ul>
+        {% for row in reagent %}
+          <li class="mr-2" href="#">Reagent ID: {{row['catalog_number']}}</li>
+        {% endfor %}
+        </ul>
+
       </div>
 
     </div>
