@@ -37,7 +37,7 @@
                     Menu
                   </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ url_for('ExperimentList') }}">Experiment</a>
+                    <a class="dropdown-item" href="{{ url_for('experimentList') }}">Experiment</a>
                     <a class="dropdown-item" href="{{ url_for('equipmentList') }}">Equipments</a>
                     <a class="dropdown-item" href="{{ url_for('reagentList') }}">Reagent</a>
                   </div>
@@ -83,9 +83,7 @@
               <ul class="list-group">
                 <a class="list-group-item list-group-item-light" href="{{ url_for('reagentList') }}">Reagent Inventory</a>
                 <a class="list-group-item list-group-item-light" href="{{ url_for('equipmentList') }}">Equipments</a>
-                <a class="list-group-item list-group-item-light" href="{{ url_for('ExperimentList') }}">Experiment</a>
-                <li class="list-group-item list-group-item-light">Calendars</li>
-                <li class="list-group-item list-group-item-light">etc</li>
+                <a class="list-group-item list-group-item-light" href="{{ url_for('experimentList') }}">Experiment</a>
               </ul>
             </p>
           </div>

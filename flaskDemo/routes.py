@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskDemo import app, db, bcrypt
-from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ExptForm, UpdateExptForm,AddProductForm
+from flaskDemo.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ExptForm, UpdateExptForm,AddProductForm, AddEquipmentForm, AddReagentForm
 from flaskDemo.models import User, Post, Employee, Project, Experiment, Reagent,Equipment,Product, Uses_Equipment, Uses_Reagent
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
@@ -170,7 +170,6 @@ def delete_experiment(experiment_ID):
 
 # Deng gets here Dec 4, 11:30 pm
 
-
 @app.route("/reagentList")
 def reagentList():
     results = Reagent.query.all()
@@ -181,19 +180,68 @@ def equipmentList():
     results = Equipment.query.all()
     return render_template('equipmentList.html', outString = results)
 
+@app.route("/experimentList")
+def experimentList():
+    results = Experiment.query.join(Employee,Employee.employee_ID == Experiment.employee_ID) \
+    .add_columns(Employee.name,Employee.employee_ID,Experiment.experiment_ID)
+    return render_template('experiment_list.html', outString = results)
+
+
 @app.route("/addProduct/<experiment_ID>", methods=['GET', 'POST'])
 @login_required
 def addProduct(experiment_ID):
     form = AddProductForm()
     if form.validate_on_submit():
-        prdt = Product(experiment_ID = experiment_ID, product_Name =form.product_Name.data,description =form.description.data,
+        prdt = Product(experiment_ID = experiment_ID, product_Name =form.product_Name.data, description =form.description.data,
                           location=form.location.data)
         db.session.add(prdt)
         db.session.commit()
         flash('You have added a new product!', 'success')
         return redirect(url_for('expt', experiment_ID=experiment_ID))
-    return render_template('add_prdt.html', title='New Product',
-                           form=form, legend='New Product')
+    elif request.method == 'GET':              
+        form.experiment_ID.data = experiment_ID
+    return render_template('add_prdt.html', title='Add Product',
+                           form=form, legend='Add Product')
+
+@app.route("/addEquipment/<experiment_ID>", methods=['GET', 'POST'])
+@login_required
+def addEquipment(experiment_ID):
+    form = AddEquipmentForm()
+    if form.validate_on_submit():
+        uses_equip = Uses_Equipment(experiment_ID=experiment_ID, equipment_ID=form.equipment_ID.data, date=form.date.data)
+        db.session.add(uses_equip)
+        db.session.commit()
+        equip = Equipment(equipment_ID=form.equipment_ID.data, equipment_Name=form.equipment_Name.data, 
+            purchase_date=form.purchase_date.data , cost=form.data.cost)
+        db.session.add(equip)
+        db.session.commit()
+        flash('You have added a new equipment!', 'success')
+        return redirect(url_for('expt', experiment_ID=experiment_ID))
+    elif request.method == 'GET':              
+        form.experiment_ID.data = experiment_ID
+    return render_template('add_equip.html', title='Add Equipment',
+                           form=form, legend='Add Equipment')
+
+@app.route("/addReagent/<experiment_ID>", methods=['GET', 'POST'])
+@login_required
+def addReagent(experiment_ID):
+    form = AddReagentForm()
+    if form.validate_on_submit():
+        uses_reag = Uses_Reagent(cataloge_number=form.cataloge_number.data, experiment_ID=experiment_ID, 
+            quantity_used=form.quantity_used.data)
+        db.session.add(uses_reag)
+        db.session.commit()
+        reag = Reagent(cataloge_number=form.cataloge_number.data, reagent_name=form.reagent_Name.data, supplier=form.supplier.data,
+                          unit_price=form.unit_price.data, quantity=form.quantity.data, expiration_date=form.expiration_date)
+        db.session.add(reag)
+        db.session.commit()
+        flash('You have added a new reagent!', 'success')
+        return redirect(url_for('expt', experiment_ID=experiment_ID))
+    elif request.method == 'GET':              
+        form.experiment_ID.data = experiment_ID
+    return render_template('add_reag.html', title='Add Reagent', 
+                            form=form, legend='Add Reagent')
+
 
 
 
@@ -286,11 +334,5 @@ def update_assign_pno(essn, pno):
         form.essn.data = assign.essn
     return render_template('create_assign.html', title='Update Assignment',
                            form=form, legend='Update Assignment')
-
-@app.route("/experimentlist")
-def ExperimentList():
-    results = Experiment.query.join(Employee,Employee.employee_ID == Experiment.employee_ID) \
-    .add_columns(Employee.name,Employee.employee_ID,Experiment.experiment_ID)
-    return render_template('experiment_list.html', outString = results)
 
     

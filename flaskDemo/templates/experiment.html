@@ -10,7 +10,9 @@
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_experiment', experiment_ID=expt.experiment_ID) }}">Update</a>
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('addProduct', experiment_ID=expt.experiment_ID) }}">Add a product</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('addProduct', experiment_ID=expt.experiment_ID) }}">Add product</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('addEquipment', experiment_ID=expt.experiment_ID) }}">Add equipment</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('addReagent', experiment_ID=expt.experiment_ID) }}">Add reagent</a>
           </div>
         <div>
           <a class="mr-2">Experiment results: {{expt.results}}</a>
