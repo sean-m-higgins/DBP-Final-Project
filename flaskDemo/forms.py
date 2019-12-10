@@ -128,6 +128,7 @@ class PostForm(FlaskForm):
 #             raise ValidationError('That department name is already being used. Please choose a different name.')
 
 class ExptForm (FlaskForm):
+    cur_experiment_ID = HiddenField("")
     experiment_ID =StringField("Experiment ID", validators = [DataRequired(),Length (max=4)])
     project_ID = SelectField("Project ID", choices=projChoices, validators=[DataRequired()])
     employee_ID = SelectField("Employee ID", choices=emplChoices, coerce=int, validators=[DataRequired()])
@@ -135,6 +136,14 @@ class ExptForm (FlaskForm):
     date = DateField("Experiment date:", format='%Y-%m-%d')
     results = TextAreaField("Results")
     submit = SubmitField('Create this experiment')
+    def validate_exp_id(self, experiment_ID):
+        exp = Experiment.query.filter_by(experiment_ID=experiment_ID.data).first()
+        if exp:
+            raise ValidationError('That experiment_ID is already used. Please choose a different experiment_ID.')
+
+
+
+
 
 class UpdateExptForm (ExptForm):
     experiment_ID =HiddenField("")
