@@ -29,13 +29,9 @@ def home():
               .add_columns(Faculty.facultyID, Faculty.facultyName, Qualified.Datequalified, Qualified.courseID)
     return render_template('join.html', title='Join', joined_1_n=results, joined_m_n=results2, joined_m_n3=results3)
 
-   
-
-
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
-
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -50,7 +46,6 @@ def register():
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
-
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -67,12 +62,10 @@ def login():
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
-
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('home'))
-
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
@@ -86,7 +79,6 @@ def save_picture(form_picture):
     i.save(picture_path)
 
     return picture_fn
-
 
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
@@ -107,7 +99,6 @@ def account():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
-
 
 @app.route("/expt/<experiment_ID>")
 @login_required
@@ -142,26 +133,20 @@ def update_experiment(experiment_ID):
     currentExptObjective = expt.experiment_Objective
     currentExptResult = expt.results  
     currentExptDate = expt.date
-
     form = UpdateExptForm()
-    print("hello") 
     if form.validate_on_submit():  
-        print("hello")        # notice we are are not passing the dnumber from the form
-        if currentExptObjective !=form.experiment_Objective.data:
+        if currentExptObjective !=form.experiment_Objective.data:  # notice we are are not passing the dnumber from the form
             expt.experiment_Objective=form.experiment_Objective.data
         if currentExptResult != form.results.data:
             expt.results = form.results.data
         if currentExptResult != form.date.data:
             expt.date = form.date.data
-
         db.session.commit()
         flash('Your experiment has been updated!', 'success')
         return redirect(url_for('home'))
     elif request.method == 'GET':              # notice we are not passing the dnumber to the form
-
         form.experiment_Objective.data = expt.experiment_Objective
         form.results.data = expt.results
-        
     return render_template('create_expt.html', title='Update Experiment',
                            form=form, legend='Update Experiment')
 
@@ -192,7 +177,6 @@ def experimentList():
     results = Experiment.query.join(Employee,Employee.employee_ID == Experiment.employee_ID) \
     .add_columns(Employee.name,Employee.employee_ID,Experiment.experiment_ID)
     return render_template('experiment_list.html', outString = results)
-
 
 @app.route("/addProduct/<experiment_ID>", methods=['GET', 'POST'])
 @login_required
@@ -240,98 +224,5 @@ def addReagent(experiment_ID):
         form.experiment_ID.data = experiment_ID
     return render_template('add_reag.html', title='Add Reagent', 
                             form=form, legend='Add Reagent')
-
-
-
-
-
-
-
-
-
-
-
-
-
-@app.route("/assign/<essn>/<pno>")
-@login_required
-def assign(essn, pno):
-    assign = Works_On.query.get_or_404([essn,pno])
-    return render_template('assign.html', title=str(assign.essn) + "_" + str(assign.pno), assign=assign, now=datetime.utcnow())
-
-@app.route("/assign/new", methods=['GET', 'POST'])
-@login_required
-def new_assign():
-    form = AssignForm()
-    if form.validate_on_submit():
-        return redirect(url_for('new_assign_pno', essn=form.essn.data, hours=form.hours.data))
-    return render_template('create_assign.html', title='New ESSN Assignment',
-                           form=form, legend='New ESSN Assignment')
-
-@app.route("/assign/<essn>/<hours>/newPno", methods=['GET', 'POST'])
-@login_required
-def new_assign_pno(essn, hours):
-    form = AssignFormPno()
-    form.essn.data = essn
-    if form.validate_on_submit():
-        assign = Works_On(essn=essn, pno=form.pno.data, hours=hours)
-        db.session.add(assign)
-        db.session.commit()
-        flash('You have added a new assignment!', 'success')
-        return redirect(url_for('home'))
-    elif request.method == 'GET':              
-        form.essn.data = essn
-    return render_template('create_assign.html', title='New Project Assignment',
-                           form=form, legend='New Project Assignment')
-
-
-@app.route("/assign/<essn>/<pno>/delete", methods=['POST'])
-@login_required
-def delete_assign(essn, pno):
-    assign = Works_On.query.get_or_404([essn,pno])
-    db.session.delete(assign)
-    db.session.commit()
-    flash('The assignment has been deleted!', 'success')
-    return redirect(url_for('home'))
-
-@app.route("/assign/<essn>/<pno>/updateEssn", methods=['GET', 'POST'])
-@login_required
-def update_assign(essn, pno):
-    assign = Works_On.query.get_or_404([essn,pno])
-    currentEssn = assign.essn
-
-    form = AssignUpdateEssnForm()
-    form.pno.data = assign.pno
-    if form.validate_on_submit():          
-        if currentEssn != form.essn.data:
-            assign.essn=form.essn.data
-        db.session.commit()
-        flash('Your Employee SSN has been saved!', 'success')
-        return redirect(url_for('update_assign_pno', essn=form.essn.data, pno=pno))
-    elif request.method == 'GET':              
-        form.essn.data = assign.essn
-        form.pno.data = assign.pno
-    return render_template('create_assign.html', title='Update Employee SSN',
-                           form=form, legend='Update Employee SSN')
-
-
-@app.route("/assign/<essn>/<pno>/updatePno", methods=['GET', 'POST'])
-@login_required
-def update_assign_pno(essn, pno):
-    assign = Works_On.query.get_or_404([essn,pno])
-    currentProj = assign.pno
-
-    form = AssignUpdatePnoForm()
-    if form.validate_on_submit():
-        if currentProj != form.pno.data:
-            assign.pno= form.pno.data
-        db.session.commit()
-        flash('Your assignment has been updated!', 'success')
-        return redirect(url_for('assign', essn=essn, pno=form.pno.data))
-    elif request.method == 'GET':              
-        form.pno.data = assign.pno
-        form.essn.data = assign.essn
-    return render_template('create_assign.html', title='Update Assignment',
-                           form=form, legend='Update Assignment')
 
     

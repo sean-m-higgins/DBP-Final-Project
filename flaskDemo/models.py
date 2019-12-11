@@ -36,25 +36,11 @@ class Post(db.Model):
          return f"Post('{self.title}', '{self.date_posted}')"
 
 
-
-
-
-
 class Experiment(db.Model):
     __table__ = db.Model.metadata.tables['Experiment']
     
 class Project(db.Model):
     __table__ = db.Model.metadata.tables['Project']
-
-# used for query_factory
-#def getDepartment(columns=None):
-#    u = Department.query
-#    if columns:
-#        u = u.options(orm.load_only(*columns))
-#    return u
-
-#def getDepartmentFactory(columns=None):
-#    return partial(getDepartment, columns=columns)
 
 class Uses_Reagent(db.Model):
     __table__ = db.Model.metadata.tables['Uses_Reagent']
