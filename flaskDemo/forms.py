@@ -5,7 +5,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, AnyOf
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flaskDemo import db
-from flaskDemo.models import User, Project, Employee, Product, Uses_Reagent, Uses_Equipment
+from flaskDemo.models import User, Project, Employee, Product, Uses_Reagent, Uses_Equipment, Reagent, Equipment
 from wtforms.fields.html5 import DateField
 
 #ssns = Department.query.with_entities(Department.mgr_ssn).distinct()
@@ -16,6 +16,12 @@ projChoices = [(row[0],row[0]) for row in projIDs]
 
 emplyIDs=Employee.query.with_entities(Employee.employee_ID).distinct()
 emplChoices = [(row[0],row[0]) for row in emplyIDs]
+
+cat_num=Reagent.query.with_entities(Reagent.catalog_number).distinct()
+cat_numChoices = [(row[0],row[0]) for row in cat_num]
+
+equip_ID=Equipment.query.with_entities(Equipment.equipment_ID).distinct()
+equipChoices = [(row[0],row[0]) for row in equip_ID]
 #myChoices2 = [(row[0],row[0]) for row in ssns]  # change
 #results=list()
 #for row in ssns:
@@ -143,14 +149,15 @@ class ExptForm (FlaskForm):
 
 
 
-class UpdateExptForm (ExptForm):
+class UpdateExptForm (FlaskForm):
     # experiment_ID =HiddenField("")
     # project_ID = HiddenField("")
     # employee_ID = HiddenField("")
     experiment_Objective = StringField("Objective", validators = [DataRequired(),Length (max=100)])
     date = DateField("Experiment date:", format='%Y-%m-%d')
-    results = StringField("Results")
+    results = TextAreaField("Results")
     submit = SubmitField('Update this experiment')
+
 
 class AddProductForm(FlaskForm):
     experiment_ID =HiddenField("")
@@ -165,11 +172,8 @@ class AddProductForm(FlaskForm):
 
 class AddEquipmentForm(FlaskForm):
     experiment_ID =HiddenField("")
-    equipment_ID= StringField("Equipment ID:", validators = [DataRequired(),Length (max=50)])
+    equipment_ID= SelectField("Equipment ID:", choices = equipChoices)
     date = DateField("Experiment date:", format='%Y-%m-%d')
-    equipment_Name= StringField("Equipment Name:", validators = [DataRequired(),Length (max=50)])
-    purchase_date = DateField("Purchase date:", format='%Y-%m-%d')
-    cost = IntegerField("Cost:", validators=[DataRequired()])
     submit = SubmitField('Add this equipment')
     def validate_product(self, equipment_ID):
         equip = Uses_Equipment.query.filter_by(experiment_ID=self.experiment_ID.data, equipment_ID=equipment_ID.data).first()
@@ -177,14 +181,9 @@ class AddEquipmentForm(FlaskForm):
             raise ValidationError('That equipment ID is already used. Please choose a different equipment ID.')
 
 class AddReagentForm(FlaskForm):
-    experiment_ID =HiddenField("")
-    catalogue_number= StringField("Catalogue Number", validators = [DataRequired(),Length (max=50)])
+    experiment_ID =HiddenField("")  
+    catalog_number= SelectField("Catalogue Number", choices = cat_numChoices)
     quantity_used= IntegerField("Quantity Used", validators=[DataRequired()])
-    reagent_Name= StringField("Reagent Name:", validators = [DataRequired(),Length (max=50)])
-    supplier= StringField("Supplier:", validators = [DataRequired(),Length (max=50)])
-    unit_price = IntegerField("Unit Price:", validators=[DataRequired()])
-    quantity = IntegerField("Quantity:", validators=[DataRequired()])
-    expiration_date = DateField("Expiration date:", format='%Y-%m-%d')
     submit = SubmitField('Add this reagent')
     def validate_product(self, catalogue_number):
         cat_num = Uses_Reagent.query.filter_by(experiment_ID=self.experiment_ID.data, catalogue_number=catalogue_number.data).first()

@@ -140,13 +140,19 @@ def update_experiment(experiment_ID):
     expt = Experiment.query.get_or_404(experiment_ID)
     currentExptObjective = expt.experiment_Objective
     currentExptResult = expt.results  
+    currentExptDate = expt.date
 
     form = UpdateExptForm()
-    if form.validate_on_submit():          # notice we are are not passing the dnumber from the form
+    print("hello") 
+    if form.validate_on_submit():  
+        print("hello")        # notice we are are not passing the dnumber from the form
         if currentExptObjective !=form.experiment_Objective.data:
             expt.experiment_Objective=form.experiment_Objective.data
         if currentExptResult != form.results.data:
             expt.results = form.results.data
+        if currentExptResult != form.date.data:
+            expt.date = form.date.data
+
         db.session.commit()
         flash('Your experiment has been updated!', 'success')
         return redirect(url_for('home'))
@@ -211,10 +217,6 @@ def addEquipment(experiment_ID):
         uses_equip = Uses_Equipment(experiment_ID=experiment_ID, equipment_ID=form.equipment_ID.data, date=form.date.data)
         db.session.add(uses_equip)
         db.session.commit()
-        equip = Equipment(equipment_ID=form.equipment_ID.data, equipment_Name=form.equipment_Name.data, 
-            purchase_date=form.purchase_date.data , cost=form.data.cost)
-        db.session.add(equip)
-        db.session.commit()
         flash('You have added a new equipment!', 'success')
         return redirect(url_for('expt', experiment_ID=experiment_ID))
     elif request.method == 'GET':              
@@ -227,13 +229,9 @@ def addEquipment(experiment_ID):
 def addReagent(experiment_ID):
     form = AddReagentForm()
     if form.validate_on_submit():
-        uses_reag = Uses_Reagent(cataloge_number=form.cataloge_number.data, experiment_ID=experiment_ID, 
+        uses_reag = Uses_Reagent(catalog_number=form.catalog_number.data, experiment_ID=experiment_ID, 
             quantity_used=form.quantity_used.data)
         db.session.add(uses_reag)
-        db.session.commit()
-        reag = Reagent(cataloge_number=form.cataloge_number.data, reagent_name=form.reagent_Name.data, supplier=form.supplier.data,
-                          unit_price=form.unit_price.data, quantity=form.quantity.data, expiration_date=form.expiration_date)
-        db.session.add(reag)
         db.session.commit()
         flash('You have added a new reagent!', 'success')
         return redirect(url_for('expt', experiment_ID=experiment_ID))
