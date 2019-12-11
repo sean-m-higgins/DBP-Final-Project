@@ -1,15 +1,29 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 {% extends "layout_laboratory.html" %}
 {% block content %}
+<input class="form-control" id="myInput" type="text" placeholder="Search.."> 
+<br>
     {% for row in outString %}
-        <article class="media content-section">
-          <div class="media-body">
+        <article class="media content-section" id="inputs">
+          <div  class="media-body">
             <div class="article-metadata">
               <a class="mr-2" href="#">{{ row['experiment_ID'] }}</a>		  
-              <small class="text-muted">{{ row['experiment_ID'] }}  {{ row['experiment_Objective'] }} {{row['date']}}</small>		  
+              <small class="text-muted">{{ row['experiment_ID'] }}  {{ row['experiment_Objective'] }} {{row['date']}}</small>		 
             </div>
 			 <h2><a class="article-title" href="{{ url_for('expt', experiment_ID=row.experiment_ID)}}">{{ row.experiment_Objective }}</a></h2>
-           
           </div>
         </article>
+        <script>
+            $(document).ready(function(){
+              $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#inputs *").filter(function() {
+                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+              });
+            });
+            </script> 
+
      {% endfor %}
 {% endblock content %}
+
