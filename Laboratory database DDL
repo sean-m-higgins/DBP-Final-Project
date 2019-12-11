@@ -1,0 +1,279 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:8889
+-- Generation Time: Dec 04, 2019 at 08:33 PM
+-- Server version: 5.7.26
+-- PHP Version: 7.3.7
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Database: `Laboratory`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Employee`
+--
+
+CREATE TABLE `Employee` (
+  `employee_ID` int(9) NOT NULL,
+  `name` varchar(40) NOT NULL,
+  `title` varchar(30) NOT NULL,
+  `e_mail` varchar(30) NOT NULL,
+  `hire_Date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Employee`
+--
+
+INSERT INTO `Employee` (`employee_ID`, `name`, `title`, `e_mail`, `hire_Date`) VALUES
+(123456789, 'John Smith', 'PhD student', 'jsmith@pmail.com', '2018-10-01'),
+(987654321, 'Bob Smith', 'Technician', 'bsmith@pmail.com', '2017-10-01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Equipment`
+--
+
+CREATE TABLE `Equipment` (
+  `equipment_ID` varchar(20) NOT NULL,
+  `equipment_Name` varchar(20) NOT NULL,
+  `purchase_Date` date NOT NULL,
+  `cost` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Equipment`
+--
+
+INSERT INTO `Equipment` (`equipment_ID`, `equipment_Name`, `purchase_Date`, `cost`) VALUES
+('BR1001', 'centrifuge', '2012-01-01', 8000),
+('TF1002', 'PCR cycler', '2013-01-01', 12000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Experiment`
+--
+
+CREATE TABLE `Experiment` (
+  `experiment_ID` char(4) NOT NULL,
+  `project_ID` char(8) NOT NULL,
+  `employee_ID` int(9) NOT NULL,
+  `experiment_Objective` varchar(100) NOT NULL,
+  `date` date NOT NULL,
+  `results` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Experiment`
+--
+
+INSERT INTO `Experiment` (`experiment_ID`, `project_ID`, `employee_ID`, `experiment_Objective`, `date`, `results`) VALUES
+('1', 'LU201501', 123456789, 'Purification of P53 protein', '2019-01-01', 'Obtain 10 mg/ml purified P53 protein'),
+('2', 'LU201502', 987654321, 'Construct a plasmid DNA expressing AB protein', '2019-01-02', 'A plasmid DNA expressing AB protein was constructed. The concentration of DNA is 680 ng/uL.');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Product`
+--
+
+CREATE TABLE `Product` (
+  `product_Name` varchar(50) NOT NULL,
+  `experiment_ID` char(4) NOT NULL,
+  `description` text NOT NULL,
+  `location` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Product`
+--
+
+INSERT INTO `Product` (`product_Name`, `experiment_ID`, `description`, `location`) VALUES
+('pcDNA-AB', '2', 'A pcDNA plasmid expressing AB protein', '-80 Freezer, tower 8, box B'),
+('Purified P53 protein', '1', 'This protein is expressed in bacterial cells.', '-80 Freezer, tower 8, box A');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Project`
+--
+
+CREATE TABLE `Project` (
+  `project_ID` char(8) NOT NULL,
+  `name` text NOT NULL,
+  `total_fund` decimal(10,0) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Project`
+--
+
+INSERT INTO `Project` (`project_ID`, `name`, `total_fund`, `start_date`, `end_date`) VALUES
+('LU201501', 'Function of Papain-like protease', '1000000', '2015-01-01', '2020-12-31'),
+('LU201502', 'Function of Endoribonuclease', '1200000', '2019-11-01', '2024-10-31');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Reagent`
+--
+
+CREATE TABLE `Reagent` (
+  `catalog_number` varchar(20) NOT NULL,
+  `reagent_name` varchar(30) NOT NULL,
+  `supplier` varchar(20) NOT NULL,
+  `unit_price` decimal(10,0) NOT NULL,
+  `quantity` int(2) NOT NULL,
+  `expiration_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Reagent`
+--
+
+INSERT INTO `Reagent` (`catalog_number`, `reagent_name`, `supplier`, `unit_price`, `quantity`, `expiration_date`) VALUES
+('R0220', 'BamH I', 'NEB', '60', 2, '2021-10-01'),
+('TF1222', 'Ni purification column', 'Fisher', '200', 4, '2022-12-01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Uses_Equipment`
+--
+
+CREATE TABLE `Uses_Equipment` (
+  `experiment_ID` char(4) NOT NULL,
+  `equipment_ID` varchar(20) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Uses_Equipment`
+--
+
+INSERT INTO `Uses_Equipment` (`experiment_ID`, `equipment_ID`, `date`) VALUES
+('1', 'BR1001', '2019-01-01'),
+('1', 'TF1002', '2019-01-02'),
+('2', 'BR1001', '2019-10-02'),
+('2', 'TF1002', '2019-10-01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Uses_Reagent`
+--
+
+CREATE TABLE `Uses_Reagent` (
+  `catalog_number` varchar(20) NOT NULL,
+  `experiment_ID` char(4) NOT NULL,
+  `quantity_used` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Uses_Reagent`
+--
+
+INSERT INTO `Uses_Reagent` (`catalog_number`, `experiment_ID`, `quantity_used`) VALUES
+('R0220', '1', 2),
+('R0220', '2', 1),
+('TF1222', '1', 4),
+('TF1222', '2', 3);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `Employee`
+--
+ALTER TABLE `Employee`
+  ADD PRIMARY KEY (`employee_ID`);
+
+--
+-- Indexes for table `Equipment`
+--
+ALTER TABLE `Equipment`
+  ADD PRIMARY KEY (`equipment_ID`);
+
+--
+-- Indexes for table `Experiment`
+--
+ALTER TABLE `Experiment`
+  ADD PRIMARY KEY (`experiment_ID`),
+  ADD KEY `Employee ID` (`employee_ID`) USING BTREE,
+  ADD KEY `project ID` (`project_ID`) USING BTREE;
+
+--
+-- Indexes for table `Product`
+--
+ALTER TABLE `Product`
+  ADD PRIMARY KEY (`product_Name`),
+  ADD KEY `Experiment ID` (`experiment_ID`);
+
+--
+-- Indexes for table `Project`
+--
+ALTER TABLE `Project`
+  ADD PRIMARY KEY (`project_ID`);
+
+--
+-- Indexes for table `Reagent`
+--
+ALTER TABLE `Reagent`
+  ADD PRIMARY KEY (`catalog_number`);
+
+--
+-- Indexes for table `Uses_Equipment`
+--
+ALTER TABLE `Uses_Equipment`
+  ADD PRIMARY KEY (`experiment_ID`,`equipment_ID`),
+  ADD KEY `Equipment ID` (`equipment_ID`);
+
+--
+-- Indexes for table `Uses_Reagent`
+--
+ALTER TABLE `Uses_Reagent`
+  ADD PRIMARY KEY (`catalog_number`,`experiment_ID`),
+  ADD KEY `Experiment ID` (`experiment_ID`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `Experiment`
+--
+ALTER TABLE `Experiment`
+  ADD CONSTRAINT `experiment_ibfk_3` FOREIGN KEY (`employee_ID`) REFERENCES `Employee` (`employee_ID`),
+  ADD CONSTRAINT `experiment_ibfk_4` FOREIGN KEY (`project_ID`) REFERENCES `Project` (`project_ID`);
+
+--
+-- Constraints for table `Product`
+--
+ALTER TABLE `Product`
+  ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`experiment_ID`) REFERENCES `Experiment` (`experiment_ID`);
+
+--
+-- Constraints for table `Uses_Equipment`
+--
+ALTER TABLE `Uses_Equipment`
+  ADD CONSTRAINT `uses_equipment_ibfk_1` FOREIGN KEY (`equipment_ID`) REFERENCES `Equipment` (`equipment_ID`),
+  ADD CONSTRAINT `uses_equipment_ibfk_2` FOREIGN KEY (`experiment_ID`) REFERENCES `Experiment` (`experiment_ID`);
+
+--
+-- Constraints for table `Uses_Reagent`
+--
+ALTER TABLE `Uses_Reagent`
+  ADD CONSTRAINT `uses_reagent_ibfk_1` FOREIGN KEY (`catalog_number`) REFERENCES `Reagent` (`catalog_number`),
+  ADD CONSTRAINT `uses_reagent_ibfk_2` FOREIGN KEY (`experiment_ID`) REFERENCES `Experiment` (`experiment_ID`);
