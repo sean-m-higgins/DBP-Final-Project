@@ -19,6 +19,34 @@
                     {{ form.experiment_ID(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+
+            <div class="form-group">
+                {{ form.employee_ID.label(class="form-control-label") }}
+                {% if form.employee_ID.errors %}
+                    {{ form.employee_ID(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.employee_ID.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.employee_ID(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.project_ID.label(class="form-control-label") }}
+                {% if form.project_ID.errors %}
+                    {{ form.project_ID(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.project_ID.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.project_ID(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
 			{% endif %}
 			
 			<div class="form-group">

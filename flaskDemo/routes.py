@@ -124,6 +124,7 @@ def expt(experiment_ID):
 def new_expt():
     form = ExptForm()
     if form.validate_on_submit():
+        print("helllo")
         expt = Experiment(experiment_ID = form.experiment_ID.data, project_ID =form.project_ID.data,employee_ID =form.employee_ID.data,
                           experiment_Objective=form.experiment_Objective.data, date = form.date.data, results = form.results.data)
         db.session.add(expt)

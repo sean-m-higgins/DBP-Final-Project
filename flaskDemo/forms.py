@@ -134,7 +134,6 @@ class PostForm(FlaskForm):
 #             raise ValidationError('That department name is already being used. Please choose a different name.')
 
 class ExptForm (FlaskForm):
-    cur_experiment_ID = HiddenField("")
     experiment_ID =StringField("Experiment ID", validators = [DataRequired(),Length (max=4)])
     project_ID = SelectField("Project ID", choices=projChoices, validators=[DataRequired()])
     employee_ID = SelectField("Employee ID", choices=emplChoices, coerce=int, validators=[DataRequired()])
@@ -180,7 +179,7 @@ class AddEquipmentForm(FlaskForm):
         if equip:
             raise ValidationError('That equipment ID is already used. Please choose a different equipment ID.')
 
-class AddReagentForm(FlaskForm):
+class AddReagentForm(FlaskForm): 
     experiment_ID =HiddenField("")  
     catalog_number= SelectField("Catalogue Number", choices = cat_numChoices)
     quantity_used= IntegerField("Quantity Used", validators=[DataRequired()])
